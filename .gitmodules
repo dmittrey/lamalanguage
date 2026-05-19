@@ -1,0 +1,3 @@
+[submodule "Lama"]
+	path = Lama
+	url = git@github.com:dmittrey/Lama.git
