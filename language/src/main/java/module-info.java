@@ -26,7 +26,7 @@
  *
  * This license is subject to the following condition:
  *
- * The above copyright notice and either this complete permission notice or at a
+ * The above copyright notice and either this complete permission notice or ata
  * minimum a reference to the UPL must be included in all copies or substantial
  * portions of the Software.
  *
@@ -38,16 +38,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-module org.graalvm.sl {
-  requires java.base;
-  requires java.logging;
-  requires jdk.unsupported;
-  requires org.antlr.antlr4.runtime;
-  requires org.graalvm.polyglot;
-  requires org.graalvm.truffle;
-  exports com.oracle.truffle.sl to org.graalvm.sl.test;
-  exports com.oracle.truffle.sl.runtime to org.graalvm.sl.test;
-  exports com.oracle.truffle.sl.builtins to org.graalvm.sl.test;
-  provides  com.oracle.truffle.api.provider.TruffleLanguageProvider with
-    com.oracle.truffle.sl.SLLanguageProvider;
+
+module org.graalvm.lama {
+    requires java.base;
+    requires org.antlr.antlr4.runtime;
+    requires org.graalvm.polyglot;
+    requires org.graalvm.truffle;
+    provides com.oracle.truffle.api.provider.TruffleLanguageProvider with
+        com.oracle.truffle.lama.LamaLanguageProvider;
 }
