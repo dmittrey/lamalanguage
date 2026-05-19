@@ -1,23 +1,56 @@
-# SimpleLanguage
+# Lama on Graal Truffle
 
-A simple demonstration language built using Truffle for GraalVM.
+Lama language interpreter implemented with Graal Truffle (JVM build), based on the
+[SimpleLanguage](https://github.com/graalvm/simplelanguage) template and the course reference
+implementation.
 
-SimpleLanguage is heavily documented to explain the how and why of writing a
-Truffle language. A good way to find out more is to read the source with
-comments. Start reading [here](https://github.com/graalvm/simplelanguage/blob/master/language/src/main/java/com/oracle/truffle/sl/SLLanguage.java).
-We also like to encourage people to clone the repository and start hacking.
+## Build
 
-This repository is licensed under the permissive UPL licence. Fork it to begin
-your own Truffle language.
+```bash
+make package
+```
 
-For instructions on how to get started please refer to [our website](http://www.graalvm.org/docs/graalvm-as-a-platform/implement-language/)
+## Run
 
-# Building for a JVM
+```bash
+./lama program.lama
+```
 
-Build the project with `mvn package`.
-To run simple language using a JDK from JAVA_HOME run `./sl`.
+Or after `make package`:
 
-# Building a Native Image
+```bash
+./standalone/target/lama --disable-launcher-output program.lama
+```
 
-Build the project with `mvn package -Pnative`.
-To run simple language natively run `./standalone/target/slnative`.
+## Regression tests
+
+```bash
+make regression
+```
+
+Run a single test:
+
+```bash
+make regression-one TEST=test040
+```
+
+Tests live in `language/test/regression/` with expected output in `orig/*.log`. **All** regression tests pass (77 tests).
+
+## Performance
+
+```bash
+make performance
+
+=== Performance: PERF_TEST=Sort PERF_N=5000 ===
+mode                time (ms)
+lamac -i           185664.610
+lamac -s            46258.170
+truffle (cold)       6679.190
+```
+
+## Docker
+
+```bash
+make docker-build
+make docker-shell
+```
