@@ -53,6 +53,28 @@
     <build>
       <plugins>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.3.2</version>
+          <executions>
+            <execution>
+              <id>clean-modules-dir</id>
+              <phase>prepare-package</phase>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+              <configuration>
+                <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                <filesets>
+                  <fileset>
+                    <directory>${project.build.directory}/modules</directory>
+                  </fileset>
+                </filesets>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <version>3.2.0</version>

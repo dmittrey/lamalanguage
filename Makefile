@@ -7,26 +7,33 @@ PERF_TEST    ?= Sort
 LAMAC        ?= $(LAMA_DIR)/_build/default/src/Driver.exe
 LAMA_TRUFFLE ?= $(PWD)/standalone/target/lama
 
-.PHONY: docker-build docker-shell package regression regression-one performance lamac-build clean
+.PHONY: docker-build docker-shell docker_check package regression regression-one performance lamac-build clean
 
 docker-build:
+	git submodule update --init Lama
 	docker build -t $(IMAGE_NAME) .
 
 docker-shell:
-	docker run --rm -it --entrypoint bash -p 8000:8000 -v $(PWD):/workspace $(IMAGE_NAME)
+	docker run --rm -it --entrypoint bash -p 8000:8000 -e INSIDE_DOCKER=1 -v $(PWD):/workspace $(IMAGE_NAME)
+
+docker_check:
+	@if [ "$(INSIDE_DOCKER)" != "1" ]; then \
+		echo "Error: Need to enter shell first! Run 'make docker-shell'" >&2; \
+		exit 1; \
+	fi
 
 package:
-	mvn -q -DskipTests package
+	mvn -q -Dmaven.test.skip=true package
 
-lamac-build:
-	cd $(LAMA_DIR) && eval $$(opam env) && dune build src runtime
+lamac-build: docker_check
+	cd $(LAMA_DIR) && eval $$(opam env) && dune build src
 
-regression: package
+regression: docker_check package
 	TEST_DIR='$(TEST_DIR)' \
 	LAMA_TRUFFLE='$(LAMA_TRUFFLE)' \
 	bash scripts/regression.sh
 
-performance: package lamac-build
+performance: docker_check package lamac-build
 	LAMA_DIR='$(LAMA_DIR)' \
 	PERF_DIR='$(PERF_DIR)' \
 	PERF_N='$(PERF_N)' \
